@@ -1,4 +1,8 @@
-from generate_code import CodeGenerator
+#from generate_code import CodeGenerator
+# 这里我将使用的模型换成通义千问
+from LLM import CodeGenerator
+import os
+
 from test_code import CodeTester
 from prompt import prompts
 from time import time
@@ -6,9 +10,9 @@ from time import time
 
 def main():
     TEST_SIMPLE_ALGORITHM_CODE = False
-    TEST_FRAMEWORK_CODE = True
+    TEST_FRAMEWORK_CODE = False
     TEST_COMPLEX_CODE = False
-    TEST_PROJECT_CODE = False
+    TEST_PROJECT_CODE = True
 
     # 初始化生成器和测试器
     code_generator = CodeGenerator()
@@ -115,7 +119,10 @@ def main():
         print("Generating test cases for existing project code...")
         for prompt in prompts["生成已有项目代码的测试用例"]:
             generated_prompt = code_generator.generate_code(prompt['prompt'])
+            print(generated_prompt)
+            input()
             with open(f"{prompt['project_path']}/main.py", "r", encoding="utf-8") as f:
+
                 project_code = f.read()
 
                 generated_prompt = generated_prompt.replace("<code>", project_code)
@@ -123,8 +130,24 @@ def main():
                 code = code_generator.generate_code(generated_prompt)
 
                 save_path = f"{prompt['save_path']}/test.py"
-                with open(save_path, "w", encoding="utf-8") as f:
-                    f.write(code)
+                # with open(save_path, "w", encoding="utf-8") as f:
+                #     f.write(code)
+                # 检查保存路径是否存在，如果不存在则创建该目录
+                if not os.path.exists(prompt['save_path']):
+                    try:
+                        os.makedirs(prompt['save_path'])
+                    except Exception as e:
+                        print(f"创建目录 {prompt['save_path']} 时出错: {e}")
+                        return
+                try:
+                    with open(save_path, "w", encoding="utf-8") as f:
+                        f.write(code)
+                    print(f"文件已成功保存至 {save_path}")
+                except Exception as e:
+                    print(f"写入文件 {save_path} 时出错: {e}")
+
+                print("开始准备测试")
+                input()
 
                 # 1. 编译测试
                 print("  Testing compilation...")
@@ -140,4 +163,16 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    #main()
+    with open(f"test_project/chatBot/test.py", "r", encoding="utf-8") as f:
+        project_code = f.read()
+
+#     test_code = '''
+# def add(a, b):
+#     print("jaja")
+#     raise ValueError("This is a test exception")
+#     return a + b
+# add(1,2)
+#         '''
+    compile_result = CodeTester().test_compile(project_code)
+    print(f"Compilation passed: {compile_result}")

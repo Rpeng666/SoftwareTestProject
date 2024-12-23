@@ -1,7 +1,7 @@
 # test_chatbot.py
 
 import unittest
-from chatbot import Chatbot
+from main import Chatbot
 
 class TestChatbot(unittest.TestCase):
     def setUp(self):
@@ -14,3 +14,7 @@ class TestChatbot(unittest.TestCase):
 
     def test_unknown_responses(self):
         self.assertEqual(self.bot.respond("unknown"), "I don't understand that.")
+
+TestChatbot.setUp()
+TestChatbot.test_known_responses()
+TestChatbot.test_unknown_responses

@@ -3,7 +3,7 @@ import time
 import pylint.lint
 from io import StringIO
 from pylint.reporters import JSONReporter
-
+import sys
 
 class CodeTester:
     def __init__(self):
@@ -18,6 +18,7 @@ class CodeTester:
             
             # 使用Python解释器进行测试
             result = subprocess.run(["python", "temp_test_code.py"], capture_output=True)
+            #result = subprocess.run([sys.executable, "temp_test_code.py"], capture_output=True)
             # 如果没有错误输出，则说明编译通过
             return result.returncode == 0
         except Exception as e:
@@ -96,7 +97,8 @@ class CodeTester:
                 f.write(code)
 
             # 执行PyTorch模型
-            result = subprocess.run(["python3", "temp_pytorch_model.py"], capture_output=True)
+            # result = subprocess.run(["python3", "temp_pytorch_model.py"], capture_output=True)
+            subprocess.run([sys.executable, "temp_test_code.py"], capture_output=True)
 
             return result.returncode == 0
         except Exception as e:
