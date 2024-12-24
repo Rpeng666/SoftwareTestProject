@@ -6,7 +6,7 @@ from http import HTTPStatus
 import dashscope
 
 
-dashscope.api_key = "sk-e2082287725c4efeb797bda10765379e"
+dashscope.api_key = "请更换为自己的密钥在灵积平台上申请"
 
 
 class CodeGenerator:

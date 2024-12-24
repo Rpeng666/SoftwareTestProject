@@ -210,7 +210,7 @@ prompts = {
 - 包括必要的设置代码。
 """,
             "project_path": "./test_project/chatBot",
-            "save_path": "Flask API接口测试用例"
+            "save_path": "聊天机器人代码测试用例"
         },
     ]
 }

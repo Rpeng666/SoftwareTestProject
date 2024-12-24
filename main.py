@@ -117,16 +117,17 @@ def main():
     if TEST_PROJECT_CODE:
         # 生成已有项目代码的测试用例
         print("Generating test cases for existing project code...")
-        for prompt in prompts["生成已有项目代码的测试用例"]:
-            generated_prompt = code_generator.generate_code(prompt['prompt'])
+        # for prompt in prompts["生成已有项目代码的测试用例"]:
+        for prompt in [prompts["生成已有项目代码的测试用例"][1]]:
+            #generated_prompt = code_generator.generate_code(prompt['prompt'])
+            generated_prompt = prompt['prompt']
             print(generated_prompt)
-            input()
             with open(f"{prompt['project_path']}/main.py", "r", encoding="utf-8") as f:
-
+               
                 project_code = f.read()
 
                 generated_prompt = generated_prompt.replace("<code>", project_code)
-                
+       
                 code = code_generator.generate_code(generated_prompt)
 
                 save_path = f"{prompt['save_path']}/test.py"
@@ -147,7 +148,7 @@ def main():
                     print(f"写入文件 {save_path} 时出错: {e}")
 
                 print("开始准备测试")
-                input()
+
 
                 # 1. 编译测试
                 print("  Testing compilation...")
@@ -163,16 +164,5 @@ def main():
 
 
 if __name__ == "__main__":
-    #main()
-    with open(f"test_project/chatBot/test.py", "r", encoding="utf-8") as f:
-        project_code = f.read()
+    main()
 
-#     test_code = '''
-# def add(a, b):
-#     print("jaja")
-#     raise ValueError("This is a test exception")
-#     return a + b
-# add(1,2)
-#         '''
-    compile_result = CodeTester().test_compile(project_code)
-    print(f"Compilation passed: {compile_result}")
